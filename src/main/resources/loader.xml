@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean id="fileLoader" class="ee.icefire.clobcopy.FileLoader">
+        <property name="clobUpdater" ref="clobUpdater"/>
+    </bean>
+
+
+    <bean id="clobUpdater" class="ee.icefire.clobcopy.ClobUpdater">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="lobHandler" ref="lobHandler"/>
+    </bean>
+
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="${dburl}"/>
+        <property name="username" value="${dbuser}"/>
+        <property name="password" value="${dbpass}"/>
+    </bean>
+
+
+    <bean id="lobHandler" class="org.springframework.jdbc.support.lob.OracleLobHandler">
+        <property name="nativeJdbcExtractor" ref="nativeJdbcExtractor"/>
+    </bean>
+
+    <bean id="nativeJdbcExtractor" class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"/>
+
+</beans>
