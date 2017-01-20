@@ -50,7 +50,7 @@ public class ClobUpdater {
     return null;
   }
 
-  private static final ArrayList REPLACEMENTS = new ArrayList();
+  private static final ArrayList<char[]> REPLACEMENTS = new ArrayList<>();
   static {
     REPLACEMENTS.add(new char[] { (char) 213, (char) 336 });// LATIN CAPITAL LETTER O WITH CARON - Õ
     REPLACEMENTS.add(new char[] { (char) 245, (char) 337 });// LATIN SMALL LETTER O WITH CARON - õ
@@ -62,8 +62,8 @@ public class ClobUpdater {
 
   protected static String replaceCorrectCharset2MKR(String string) {
     if (string != null) {
-      for (int i=0; i < REPLACEMENTS.size();i++) {
-        char[] rep = (char[]) REPLACEMENTS.get(i);
+      for (Object REPLACEMENT : REPLACEMENTS) {
+        char[] rep = (char[]) REPLACEMENT;
         string = string.replace(rep[0], rep[1]);
       }
     }
@@ -75,8 +75,8 @@ public class ClobUpdater {
       return "";
     }
     else if (string.trim().length() > 0) {
-      for (int i=0; i < REPLACEMENTS.size();i++) {
-        char[] rep = (char[]) REPLACEMENTS.get(i);
+      for (Object REPLACEMENT : REPLACEMENTS) {
+        char[] rep = (char[]) REPLACEMENT;
         string = string.replace(rep[1], rep[0]);
       }
     }
@@ -127,12 +127,15 @@ public class ClobUpdater {
 
     init();
 
-    List<Template> clobs = (List<Template>) jdbcTemplate.query("select allp_id, aldl_kood, pdf_pohi, pohi from ma2.alg_dok_liik_pohi", new ResultSetExtractor<Object>() {
+    List<Template> clobs = (List<Template>) jdbcTemplate.query("select allp_id, aldl_kood, " +
+      "pdf_pohi, pohi from ma2.alg_dok_liik_pohi", new ResultSetExtractor<Object>() {
         @Override
         public Object extractData(ResultSet resultSet) throws SQLException, DataAccessException {
           List<Template> clobs1 = new ArrayList<Template>();
           while (resultSet.next()){
-            clobs1.add(new Template(ClobUpdater.ClobToString(resultSet.getClob("pdf_pohi")), ClobUpdater.ClobToString(resultSet.getClob("pohi")), resultSet.getLong("allp_id"), resultSet.getString("aldl_kood")));
+            clobs1.add(new Template(ClobUpdater.ClobToString(resultSet.getClob("pdf_pohi")),
+              ClobUpdater.ClobToString(resultSet.getClob("pohi")),
+              resultSet.getLong("allp_id"), resultSet.getString("aldl_kood")));
           }
           return clobs1;
         }

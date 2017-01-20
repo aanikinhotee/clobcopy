@@ -6,7 +6,11 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -89,29 +93,13 @@ public class FileLoader {
 
   private String readFile(File file) throws IOException, FileLoaderException {
 
+    byte[] bytes = Files.readAllBytes(file.toPath());
 
-    FileInputStream fileInputStream = new FileInputStream(file);
-
-    BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-
-    byte [] buf = new byte[1024];
-
-
-    StringBuilder sb = new StringBuilder();
-    int offset;
-    boolean firstBuffer = true;
-    while ((offset = bufferedInputStream.read(buf)) != -1) {
-      if(firstBuffer){
-        if((buf[0] == (byte) 0xEF) && (buf[1] == (byte) 0xBB) && (buf[2] == (byte) 0xBF)){
-          throw new FileLoaderException("File contains BOM, please remove it first");
-        }
-        firstBuffer = false;
-      }
-
-      sb.append(new String(buf, 0, offset));
+    if((bytes[0] == (byte) 0xEF) && (bytes[1] == (byte) 0xBB) && (bytes[2] == (byte) 0xBF)){
+      throw new FileLoaderException("File contains BOM, please remove it first");
     }
 
-    return sb.toString();
+    return new String(bytes);
   }
   private static Logger LOG = Logger.getLogger(FileLoader.class);
 

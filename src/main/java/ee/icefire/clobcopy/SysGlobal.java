@@ -276,12 +276,9 @@ public class SysGlobal {
   }
 
   private static String prepareProcessTimeMessage(String message, long previousTime, long currentTime){
-    StringBuilder sb = new StringBuilder(message);
     double miliseconds = currentTime - previousTime;
     double seconds = miliseconds / 1000;
-    sb.append(miliseconds).append(" miliseconds, ");
-    sb.append(seconds).append(" seconds");
-    return sb.toString();
+    return message + miliseconds + " miliseconds, " + seconds + " seconds";
   }
 //--------------------------------------------------------------//
 }
