@@ -91,7 +91,7 @@ public class FileLoader {
   }
 
 
-  private String readFile(File file) throws IOException, FileLoaderException {
+  String readFile(File file) throws IOException, FileLoaderException {
 
     byte[] bytes = Files.readAllBytes(file.toPath());
 

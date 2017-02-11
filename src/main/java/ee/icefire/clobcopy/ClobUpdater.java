@@ -27,14 +27,14 @@ public class ClobUpdater {
 
   public static String ClobToString(Clob body) throws SQLException {
     if(body != null){
-      int offset = -1;
+      int offset;
       int chunkSize = 1024;
       long bodyLength = body.length();
       if (chunkSize > bodyLength) {
         chunkSize = (int) bodyLength;
       }
       char buffer[] = new char[chunkSize];
-      StringBuffer stringBuffer = new StringBuffer();
+      StringBuilder stringBuffer = new StringBuilder();
       Reader reader = body.getCharacterStream();
 
       try {
@@ -50,40 +50,6 @@ public class ClobUpdater {
     return null;
   }
 
-  private static final ArrayList<char[]> REPLACEMENTS = new ArrayList<>();
-  static {
-    REPLACEMENTS.add(new char[] { (char) 213, (char) 336 });// LATIN CAPITAL LETTER O WITH CARON - Õ
-    REPLACEMENTS.add(new char[] { (char) 245, (char) 337 });// LATIN SMALL LETTER O WITH CARON - õ
-    REPLACEMENTS.add(new char[] { (char) 381, (char) 354 });// LATIN CAPITAL LETTER Z WITH CARON - Ž
-    REPLACEMENTS.add(new char[] { (char) 382, (char) 355 });// LATIN SMALL LETTER Z WITH CARON - ž
-    REPLACEMENTS.add(new char[] { (char) 352, (char) 272 });// LATIN CAPITAL LETTER S WITH CARON - Š
-    REPLACEMENTS.add(new char[] { (char) 353, (char) 273 });// LATIN SMALL LETTER S WITH CARON - š
-  }
-
-  protected static String replaceCorrectCharset2MKR(String string) {
-    if (string != null) {
-      for (Object REPLACEMENT : REPLACEMENTS) {
-        char[] rep = (char[]) REPLACEMENT;
-        string = string.replace(rep[0], rep[1]);
-      }
-    }
-    return string;
-  }
-
-  protected static String replaceMKR2CorrectCharset(String string) {
-    if (string == null) {
-      return "";
-    }
-    else if (string.trim().length() > 0) {
-      for (Object REPLACEMENT : REPLACEMENTS) {
-        char[] rep = (char[]) REPLACEMENT;
-        string = string.replace(rep[1], rep[0]);
-      }
-    }
-    return string;
-  }
-
-
   public enum CheckResult{
     NEW, OLD
   }
@@ -91,9 +57,6 @@ public class ClobUpdater {
   DataSource dataSource;
 
   LobHandler lobHandler;
-
-  String encoding = "ANSI";       // baasi kodeering
-  //String encoding = "UTF8";     // baasi kodeering
 
   public LobHandler getLobHandler() {
     return lobHandler;
@@ -260,11 +223,7 @@ public class ClobUpdater {
 
   private String optimizeTemplate(String filedata) {
     final String filedataConverted;
-    if("UTF8".equals(encoding)){
-      filedataConverted = filedata;
-    } else {
-      filedataConverted = replaceCorrectCharset2MKR(filedata);
-    }
+    filedataConverted = filedata;
     return filedataConverted;
   }
 
