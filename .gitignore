@@ -1,3 +1,17 @@
 .idea
 *.iml
 target
+clobcopy.log
+clobcopy-1.0.1.zip
+clobcopy-1.0.2.zip
+clobcopy-1.0.zip
+clobcopy-beta.zip
+clobcopy_1.0.3.zip
+tmpOut
+tmp
+clobcopy/clobcopy.pr1
+clobcopy/clobcopy-*-jar-with-dependencies.jar*
+clobcopy/clobcopy.properties.origin
+/clobcopy.properties
+/clobcopy.properties.isiklik
+/clobcopy.sh

@@ -15,7 +15,33 @@
     </repository>
   </repositories>
 
+  <profiles>
+    <profile>
+      <id>rmit</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <repositories>
+        <repository>
+          <id>repo.rmv</id>
+          <name>RMIT internal repository</name>
+          <url>http://repo.rmv/archiva/repository/internal/</url>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <modules>
+    <module>cmd-release</module>
+    <module>common</module>
+  </modules>
+
   <dependencies>
+    <dependency>
+      <groupId>clobcopy</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0.5</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -64,8 +90,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.5.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
