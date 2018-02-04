@@ -36,15 +36,15 @@ public class CVSClient {
     return returnFiles;
   }
 
-  public List<File> checkout(String localPath, String tag) throws Exception {
+  public CheckoutMeta checkout(String localPath, String tag) throws Exception {
 
-    File file = new File(localPath);
-    if(file.exists()){
-      if(file.isFile()){
+    File localDirectory = new File(localPath);
+    if(localDirectory.exists()){
+      if(localDirectory.isFile()){
         throw new CVSClientException("localPath can't be a file, it should be a directory");
       }
     } else {
-      if(file.mkdir()){
+      if(localDirectory.mkdir()){
         LOG.info("local directory created");
       } else {
         throw new CVSClientException("Unable to create localPath directory");
@@ -68,6 +68,6 @@ public class CVSClient {
     if(CVSCommand.processCommand(argc, files, localPath, System.out, System.out)){
       returnFiles = getFilesList(returnFiles, checkoutDir);
     }
-    return returnFiles;
+    return new CheckoutMeta(returnFiles, localDirectory);
   }
 }

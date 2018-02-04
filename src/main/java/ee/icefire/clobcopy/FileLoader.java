@@ -145,7 +145,10 @@ public class FileLoader {
       fileLoader.getClobUpdater().processClob(data, f.get(ALLP_ID_KEY), f.get(TYYP_KEY), f.get(ALDL_KOOD_KEY));
     } else if (pr.getProperty(SysGlobal.MODE).equals(SysGlobal.MODE_CVS)) {
       CVSClient cvsClient = new CVSClient();
-      List<File> files = cvsClient.checkout(pr.getProperty(SysGlobal.LOCAL_PATH), pr.getProperty(SysGlobal.CVS_TAG));
+
+      CheckoutMeta checkoutMeta = cvsClient.checkout(pr.getProperty(SysGlobal.LOCAL_PATH), pr.getProperty(SysGlobal.CVS_TAG));
+
+      List<File> files = checkoutMeta.getFiles();
 
       for(File file:files){
         LOG.info("Processing file = " + file.getName());
